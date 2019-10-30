@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "pybl3p"
+version = "0.1.0"
+description = ""
+authors = ["Gijs Molenaar <gijs@pythonic.nl>"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+requests = "*"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
