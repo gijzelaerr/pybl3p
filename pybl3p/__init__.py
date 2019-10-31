@@ -18,27 +18,44 @@ def _request(callname, url='https://api.bl3p.eu', api_version=1, market='BTCEUR'
         raise Exception('unexpected response code: %d' % response.status_code)
 
 
+def ticker() -> (str, float, float, float, Tuple[float, float]):
+    """
+
+    Returns:
+        a tuple containing:
+
+            currency: The currency the returned values apply to
+            last: Price of the last trade
+            bid: Price of the current bid
+            ask: Price of the current ask
+            volume: tuple of trades executed for the regarding order:
+
+                24h: Volume of the last 24 hours
+                30d: Volume of the last 30 days
+    """
+    return _request('ticker')
+
+
 def trades():
     """
     Last 1000 trades
 
-    :return: Array of trades.
+    Returns:
+         A list of trades.
     """
     return _request('trades')
 
 
 def tradehistory(timefactor: str = None, timevalue: int = None) -> List[Tuple[int, float, float]]:
     """
-     Trade history
+    Trade history
 
-    :return: tradehistory, An array containing datapoints
+    Returns:
+        A list of datapoint tuples containing:
 
-    The 'tradehistory' array will contain:
-        The time of the datapoint (long)
-        The price of the datapoint (float)
-        The volume of the datapoint (float)
-
-
+            time:  The time of the datapoint
+            price: The price of the datapoint
+            volume: The volume of the datapoint
     """
     assert((timefactor is None) == (timevalue is None))
 
