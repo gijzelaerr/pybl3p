@@ -1,5 +1,9 @@
-from pybl3p import __version__
+from pybl3p import trades
+from unittest import TestCase
 
 
-def test_version():
-    assert __version__ == '0.1.0'
+class Pybl3pTest(TestCase):
+    def test_trades(self):
+        _ = trades()
+
+    def test_tradehistory(self):
