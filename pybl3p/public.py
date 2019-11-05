@@ -58,12 +58,12 @@ def tradehistory(timefactor: str = None, timevalue: int = None) -> List[Tuple[in
             price: The price of the datapoint
             volume: The volume of the datapoint
     """
-    assert((timefactor is None) == (timevalue is None))
+    assert ((timefactor is None) == (timevalue is None))
 
     params = {}
 
     if timefactor:
-        assert(timefactor in ('h', 'd', 'm', 'y'))
+        assert (timefactor in ('h', 'd', 'm', 'y'))
         params['timefactor'] = timefactor
 
     if timevalue:
