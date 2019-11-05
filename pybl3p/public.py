@@ -1,6 +1,6 @@
 from typing import Tuple, List
 
-from pybl3p import http_request
+from pybl3p.requests import public_request
 
 
 def ticker() -> (str, float, float, float, Tuple[float, float]):
@@ -19,7 +19,7 @@ def ticker() -> (str, float, float, float, Tuple[float, float]):
                 24h: Volume of the last 24 hours
                 30d: Volume of the last 30 days
     """
-    return http_request('ticker')
+    return public_request('ticker')
 
 
 def orderbook() -> (List[Tuple[int, int, int]], List[Tuple[int, int, int]]):
@@ -44,7 +44,7 @@ def trades():
     Returns:
          A list of trades.
     """
-    return http_request('trades')
+    return public_request('trades')
 
 
 def tradehistory(timefactor: str = None, timevalue: int = None) -> List[Tuple[int, float, float]]:
@@ -60,7 +60,13 @@ def tradehistory(timefactor: str = None, timevalue: int = None) -> List[Tuple[in
     """
     assert((timefactor is None) == (timevalue is None))
 
+    params = {}
+
     if timefactor:
         assert(timefactor in ('h', 'd', 'm', 'y'))
+        params['timefactor'] = timefactor
 
-    return http_request('trades')
+    if timevalue:
+        params['timevalue'] = timevalue
+
+    return public_request('trades', params=params)
