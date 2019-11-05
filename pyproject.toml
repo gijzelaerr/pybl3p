@@ -7,6 +7,7 @@ authors = ["Gijs Molenaar <gijs@pythonic.nl>"]
 [tool.poetry.dependencies]
 python = "^3.6"
 requests = "*"
+websockets = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"

@@ -1,8 +1,8 @@
-from pybl3p import trades, tradehistory, ticker
+from pybl3p.public import ticker, orderbook, trades, tradehistory
 from unittest import TestCase
 
 
-class Pybl3pTest(TestCase):
+class PublicTest(TestCase):
     def test_trades(self):
         _ = trades()
 
@@ -11,3 +11,6 @@ class Pybl3pTest(TestCase):
 
     def test_tradehistory(self):
         _ = tradehistory()
+
+    def test_orderbook(self):
+        _ = orderbook()
