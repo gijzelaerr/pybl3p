@@ -26,7 +26,8 @@ def do_request(
     if response.status_code != 200:
         raise Exception('unexpected response code: %d' % response.status_code)
 
-    return response.json()
+    parsed = response.json()
+    return parsed
 
 
 def public_request(
@@ -42,7 +43,7 @@ def public_request(
 
     path = f'{market}/{callname}'
     url = f"{base_url}{path}"
-    do_request(url, params)
+    return do_request(url, params)
 
 
 async def websocket_request(

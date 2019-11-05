@@ -4,16 +4,16 @@ from unittest import TestCase
 
 class PublicTest(TestCase):
     def test_trades(self):
-        _ = trades()
+        result = trades()
 
     def test_ticker(self):
-        _ = ticker()
+        result = ticker()
 
     def test_tradehistory(self):
-        _ = tradehistory()
+        result = tradehistory()
 
     def test_tradehistory_params(self):
-        _ = tradehistory(timefactor='h', timevalue=5)
+        result = tradehistory(timefactor='h', timevalue=5)
 
     def test_orderbook(self):
-        _ = orderbook()
+        result = orderbook()

@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple, List, Dict
 
 from pybl3p.requests import public_request
 
@@ -35,16 +35,21 @@ def orderbook() -> (List[Tuple[int, int, int]], List[Tuple[int, int, int]]):
                 price: Limit price in EUR (*1e5)
                 count: Count of orders at this price.
     """
+    response = public_request('orderbook')
+    assert response['result'] == 'success'
+    return response['data']['orderbook']
 
 
-def trades():
+def trades() -> List[Dict[str, int]]:
     """
     Last 1000 trades
 
     Returns:
          A list of trades.
     """
-    return public_request('trades')
+    response = public_request('trades')
+    assert response['result'] == 'success'
+    return response['data']['trades']
 
 
 def tradehistory(timefactor: str = None, timevalue: int = None) -> List[Tuple[int, float, float]]:
@@ -69,4 +74,4 @@ def tradehistory(timefactor: str = None, timevalue: int = None) -> List[Tuple[in
     if timevalue:
         params['timevalue'] = timevalue
 
-    return public_request('trades', params=params)
+    return public_request('tradehistory', params=params)
