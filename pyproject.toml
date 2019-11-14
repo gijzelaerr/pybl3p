@@ -6,6 +6,7 @@ license = "MIT"
 authors = ["Gijs Molenaar <gijs@pythonic.nl>"]
 readme = "README.md"
 repository = "https://github.com/gijzelaerr/pybl3p"
+include = ["pybl3p/py.typed"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
