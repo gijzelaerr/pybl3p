@@ -47,17 +47,18 @@ def public_request(
 
 
 async def websocket_request(
-        channel: str = 'orderbook',
-        base_url: str = 'wss://api.bl3p.eu/1/',
+        channel: str = 'trades',
+        base_url: str = "wss://api.bl3p.eu/1",
         market: str = 'BTCEUR'
 ):
     """
     args:
-
+        channel: trades or orderbook
     note: server seems to always give a 400, not sure why yet.
     """
-    uri = f"{base_url}/{market}/{channel}/"
-    async with websockets.connect(uri) as websocket:
+    assert (channel in ('trades', 'orderbook'))
+    url = f"{base_url}/{market}/{channel}"
+    async with websockets.connect(url) as websocket:
         async for message in websocket:
             print(f"{message}")
 
