@@ -45,7 +45,12 @@ def trades() -> List[Dict[str, int]]:
     Last 1000 trades
 
     Returns:
-         A list of trades.
+         A list of trades represented as a dicts, with keys:
+
+            date: unix timestamp
+            trade_id:
+            price_int:
+            amount_int:
     """
     response = public_request('trades')
     assert response['result'] == 'success'
@@ -55,6 +60,10 @@ def trades() -> List[Dict[str, int]]:
 def tradehistory(timefactor: str = None, timevalue: int = None) -> List[Tuple[int, float, float]]:
     """
     Trade history
+
+    args:
+        timefactor: one of h, d, m, or y
+        timevalue: the number of units
 
     Returns:
         A list of datapoint tuples containing:
@@ -74,7 +83,7 @@ def tradehistory(timefactor: str = None, timevalue: int = None) -> List[Tuple[in
     if timevalue:
         params['timevalue'] = timevalue
 
-    return public_request('tradehistory', params=params)
+    return public_request('tradehistory', params=params)['tradehistory']
 
 
 def trades_stream():
