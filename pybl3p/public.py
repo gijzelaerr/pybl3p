@@ -1,6 +1,6 @@
 from typing import Tuple, List, Dict
 
-from pybl3p.requests import public_request
+from pybl3p.requests import public_request, websocket_request
 
 
 def ticker() -> (str, float, float, float, Tuple[float, float]):
@@ -75,3 +75,32 @@ def tradehistory(timefactor: str = None, timevalue: int = None) -> List[Tuple[in
         params['timevalue'] = timevalue
 
     return public_request('tradehistory', params=params)
+
+
+def trades_stream():
+    """
+    A live stream of trades.
+
+    async yields:
+        a dict containing:
+            date:
+            marketplace:
+            price_int:
+            type:
+            amount_int:
+    """
+    return websocket_request(channel='trades')
+
+
+def orderbook_stream():
+    """
+    A live stream of orderbook updates
+
+    async yields:
+        a dict containing:
+            asks:
+                a list of dicts containing price_int and amount_int key values
+            bids:
+                a list of dicts containing price_int and amount_int key values
+    """
+    return websocket_request(channel='orderbook')

@@ -2,6 +2,7 @@ import base64
 import hashlib
 import hmac
 from os import environ
+import json
 from time import time
 from urllib.parse import urlencode
 
@@ -60,7 +61,7 @@ async def websocket_request(
     url = f"{base_url}/{market}/{channel}"
     async with websockets.connect(url) as websocket:
         async for message in websocket:
-            print(f"{message}")
+            yield json.loads(message)
 
 
 def private_request(
