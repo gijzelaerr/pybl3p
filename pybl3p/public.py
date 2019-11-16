@@ -37,7 +37,7 @@ def orderbook() -> (List[Tuple[int, int, int]], List[Tuple[int, int, int]]):
     """
     response = public_request('orderbook')
     assert response['result'] == 'success'
-    return response['data']['orderbook']
+    return response['data']
 
 
 def trades() -> List[Dict[str, int]]:
