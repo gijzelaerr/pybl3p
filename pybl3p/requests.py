@@ -5,6 +5,7 @@ from os import environ
 import json
 from time import time
 from urllib.parse import urlencode
+from typing import AsyncGenerator, Dict
 
 import requests
 import websockets
@@ -14,7 +15,7 @@ def do_request(
         url: str,
         params: dict = None,
         headers: dict = None
-):
+) -> dict:
     response = requests.request(
         method='POST',
         url=url,
@@ -36,7 +37,7 @@ def public_request(
         base_url: str = 'https://api.bl3p.eu/1/',
         market: str = 'BTCEUR',
         params: dict = None,
-):
+) -> dict:
     assert market in ('BTCEUR', 'LTCEUR', 'GENMKT')
 
     if not params:
@@ -51,11 +52,11 @@ async def websocket_request(
         channel: str = 'trades',
         base_url: str = "wss://api.bl3p.eu/1",
         market: str = 'BTCEUR'
-):
+) -> AsyncGenerator[dict, None]:
     """
     args:
         channel: trades or orderbook
-    note: server seems to always give a 400, not sure why yet.
+
     """
     assert (channel in ('trades', 'orderbook'))
     url = f"{base_url}/{market}/{channel}"
@@ -70,7 +71,7 @@ def private_request(
         market='BTCEUR',
         namespace: str = 'money',
         params=None,
-):
+) -> dict:
     """
     args:
         callname: Name of call (for example: “wallet/history”)

@@ -24,7 +24,7 @@ def order_result():
     raise NotImplemented
 
 
-def depth_full(market: str = 'GENMKT'):
+def depth_full(market: str = 'GENMKT') -> dict:
     """
     Get the whole orderbook
 

@@ -1,4 +1,4 @@
-from typing import Tuple, List, Dict
+from typing import Tuple, List, Dict, AsyncGenerator
 
 from pybl3p.requests import public_request, websocket_request
 
@@ -86,12 +86,11 @@ def tradehistory(timefactor: str = None, timevalue: int = None) -> List[Tuple[in
     return public_request('tradehistory', params=params)['tradehistory']
 
 
-def trades_stream():
+def trades_stream() -> AsyncGenerator[dict, None]:
     """
     A live stream of trades.
 
-    async yields:
-        a dict containing:
+    async generator yielding a dict containing:
             date:
             marketplace:
             price_int:
@@ -101,7 +100,7 @@ def trades_stream():
     return websocket_request(channel='trades')
 
 
-def orderbook_stream():
+def orderbook_stream() -> AsyncGenerator[dict, None]:
     """
     A live stream of orderbook updates
 
