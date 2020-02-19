@@ -12,6 +12,8 @@ include = ["pybl3p/py.typed"]
 python = "^3.6"
 requests = "*"
 websockets = "*"
+notebook = "*"
+pandas = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"
