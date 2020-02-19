@@ -5,7 +5,7 @@ from os import environ
 import json
 from time import time
 from urllib.parse import urlencode
-from typing import AsyncGenerator, Dict
+from typing import AsyncGenerator, Union
 
 import requests
 import websockets
@@ -71,7 +71,7 @@ def private_request(
         market='BTCEUR',
         namespace: str = 'money',
         params=None,
-) -> dict:
+) -> Union[dict, list]:
     """
     args:
         callname: Name of call (for example: “wallet/history”)
