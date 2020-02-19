@@ -61,7 +61,7 @@ def trades() -> pd.DataFrame:
     return df
 
 
-def tradehistory(timefactor: str = None, timevalue: int = None) -> List[Tuple[int, float, float]]:
+def tradehistory(timefactor: str = None, timevalue: int = None) -> pd.DataFrame:
     """
     Trade history
 
@@ -70,7 +70,7 @@ def tradehistory(timefactor: str = None, timevalue: int = None) -> List[Tuple[in
         timevalue: the number of units
 
     Returns:
-        A list of datapoint tuples containing:
+        A DataFrame with columns:
 
             time:  The time of the datapoint
             price: The price of the datapoint
@@ -87,7 +87,13 @@ def tradehistory(timefactor: str = None, timevalue: int = None) -> List[Tuple[in
     if timevalue:
         params['timevalue'] = timevalue
 
-    return public_request('tradehistory', params=params)['tradehistory']
+    data = public_request('tradehistory', params=params)['tradehistory']
+
+    df = pd.DataFrame(data)
+    df = df.rename(columns={'t': 'time', 'v': 'volume', 'p': 'price'})
+    df['time'] = pd.to_datetime(df['time'], unit='s')
+    df = df.set_index('time')
+    return df
 
 
 def trades_stream() -> AsyncGenerator[dict, None]:
