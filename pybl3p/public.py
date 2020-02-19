@@ -40,12 +40,12 @@ def orderbook() -> (List[Tuple[int, int, int]], List[Tuple[int, int, int]]):
     return asks, bids
 
 
-def trades() -> List[Dict[str, int]]:
+def trades() -> pd.DataFrame:
     """
     Last 1000 trades
 
     Returns:
-         A list of trades represented as a dicts, with keys:
+         A pandas DataFrame with trades, as columns:
 
             date: unix timestamp
             trade_id:
@@ -54,7 +54,11 @@ def trades() -> List[Dict[str, int]]:
     """
     response = public_request('trades')
     assert response['result'] == 'success'
-    return response['data']['trades']
+    trades = response['data']['trades']
+    df = pd.DataFrame(trades)
+    df['date'] = pd.to_datetime(df['date'], unit='ms')
+    df.set_index('date', inplace=True)
+    return df
 
 
 def tradehistory(timefactor: str = None, timevalue: int = None) -> List[Tuple[int, float, float]]:
