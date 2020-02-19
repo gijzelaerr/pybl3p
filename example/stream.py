@@ -6,25 +6,31 @@ from pybl3p.public import trades_stream
 
 async def pybl3p_loop():
     async for msg in trades_stream():
-        print(msg)
+        print(f"bl3p: {msg}")
 
 
-async def other_loop():
-    url = "wss://ws.bitstamp.net."
-    async with websockets.connect(url) as websocket:
-        payload = {
-            "event": "bts:subscribe",
-            "data": {
-                "channel": "live_trades_btceur"
-            }
+async def bitstamp_loop():
+    bitstamp_subscribe = {
+        "event": "bts:subscribe",
+        "data": {
+            "channel": "live_trades_btceur"
         }
-        await websocket.send(payload)
-        async for message in websocket:
-            yield json.loads(message)
+    }
+
+    bitstamp_url = "wss://ws.bitstamp.net"
+
+    async def other_loop():
+        async with websockets.connect(bitstamp_url) as websocket:
+            await websocket.send(json.dumps(bitstamp_subscribe))
+            async for message in websocket:
+                yield json.loads(message)
+
+    async for msg in other_loop():
+        print(f"bitstamp: {msg}")
 
 
 async def main():
-    loops = {pybl3p_loop(), other_loop()}
+    loops = {pybl3p_loop(), bitstamp_loop()}
     await asyncio.wait(loops)
 
 
