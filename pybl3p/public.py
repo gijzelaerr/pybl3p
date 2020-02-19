@@ -1,4 +1,5 @@
 from typing import Tuple, List, Dict, AsyncGenerator
+import pandas as pd
 
 from pybl3p.requests import public_request, websocket_request
 
@@ -24,20 +25,19 @@ def ticker() -> (str, float, float, float, Tuple[float, float]):
 
 def orderbook() -> (List[Tuple[int, int, int]], List[Tuple[int, int, int]]):
     """
-    Orderbook
+     The list of orders that the exchanges uses to record the interest of buyers and sellers
 
     Returns:
-        a tuple containing 'asks' list and 'bids' list:
-
-            asks and bids lists both contain:
-
-                amount: Amount BTC (*1e8)
-                price: Limit price in EUR (*1e5)
-                count: Count of orders at this price.
+        a tuple containing 'asks' list and 'bids' dataframes with columns:
+            amount: Amount BTC (*1e8)
+            price: Limit price in EUR (*1e5)
+            count: Count of orders at this price.
     """
     response = public_request('orderbook')
     assert response['result'] == 'success'
-    return response['data']
+    asks = pd.DataFrame(response['data']['asks'])
+    bids = pd.DataFrame(response['data']['bids'])
+    return asks, bids
 
 
 def trades() -> List[Dict[str, int]]:
