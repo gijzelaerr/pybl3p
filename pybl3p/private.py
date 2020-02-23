@@ -43,7 +43,7 @@ def order_add(type_: str, amount: int = None, price: int = None, amount_funds: i
         params['amount_funds_int'] = amount_funds
 
     data = private_request(callname='order/add', market=market, params=params)
-    return error_check(data)
+    return error_check(data)['order_id']
 
 
 def order_cancel(order_id: int, market: str = 'BTCEUR'):
