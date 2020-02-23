@@ -1,6 +1,14 @@
 from typing import List, Tuple
 from pybl3p.requests import private_request
 from datetime import datetime
+import pandas as pd
+
+
+def error_check(response: dict) -> dict:
+    if response['result'] != 'success':
+        raise Exception(response['data'])
+    else:
+        return response['data']
 
 
 def order_add():
@@ -10,11 +18,14 @@ def order_add():
     raise NotImplemented
 
 
-def order_cancel():
+def order_cancel(order_id: int, market: str = 'BTCEUR'):
     """
     Cancel an order
     """
-    raise NotImplemented
+    assert market in ('BTCEUR', 'LTCEUR')
+    params = {'order_id': order_id}
+    data = private_request(callname='order/cancel', market=market, params=params)
+    return error_check(data)
 
 
 def order_result():
@@ -24,20 +35,23 @@ def order_result():
     raise NotImplemented
 
 
-def depth_full(market: str = 'GENMKT') -> dict:
+def depth_full(market: str = 'BTCEUR') -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
     Get the whole orderbook
 
     Returns:
-        a tuple containing 'asks' list and 'bids' list:
+        a asks and bids pandas Dataframe, each with the columns:
 
-            asks and bids lists both contain:
-
-                amount: Amount BTC (*1e8)
-                price: Limit price in EUR (*1e5)
-                count: Count of orders at this price.
+            amount: Amount BTC (*1e8)
+            price: Limit price in EUR (*1e5)
+            count: Count of orders at this price.
     """
-    return private_request(callname='depth/full', market=market)
+    assert market in ('BTCEUR', 'LTCEUR', 'GENMKT')
+    data = private_request(callname='depth/full', market=market)
+    checked = error_check(data)
+    asks = checked['asks']
+    bids = checked['bids']
+    return pd.DataFrame(asks), pd.DataFrame(bids)
 
 
 def wallet_history(currency: str = 'EUR', page: int = 1):
@@ -50,7 +64,8 @@ def wallet_history(currency: str = 'EUR', page: int = 1):
 
     """
     params = {'currency': currency, 'page': page}
-    return private_request(callname='wallet/history', market='GENMKT', params=params)
+    data = private_request(callname='wallet/history', market='GENMKT', params=params)
+    return error_check(data)
 
 
 def new_deposit_address():
@@ -74,20 +89,23 @@ def withdraw():
     raise NotImplemented
 
 
-def info():
+def info() -> dict:
     """
     Get account info & balance
     """
-    return private_request(callname='info', market='GENMKT')
+    data = private_request(callname='info', market='GENMKT')
+    return error_check(data)
 
 
-def orders(market: str = 'GENMKT') -> List[
-    Tuple[int, str, str, str, str, str, datetime, float, float, float, float, float]]:
+def orders(market: str = 'BTCEUR') -> pd.DataFrame:
     """
-    Get active orders
+    Get active orders.
+
+    args:
+        market: BTCEUR or LTCEUR
 
     returns:
-        A list of tuples containing:
+        A DataFrame with columns:
 
             order_id: Id of the order.
             label: API-key label
@@ -102,7 +120,9 @@ def orders(market: str = 'GENMKT') -> List[
             price: Order limit price.
             amount_funds: Maximal EUR amount to spend (*1e5)
     """
-    return private_request(callname='orders', market=market)
+    assert market in ('BTCEUR', 'LTCEUR')
+    data = private_request(callname='orders', market=market)
+    return pd.DataFrame(error_check(data)['orders'])
 
 
 def orders_history(
