@@ -11,11 +11,39 @@ def error_check(response: dict) -> dict:
         return response['data']
 
 
-def order_add():
+def order_add(type_: str, amount: int = None, price: int = None, amount_funds: int = None,
+              fee_currency: str = 'EUR',
+              market: str = 'BTCEUR'):
     """
     Create an order
+
+    args:
+        type_: ask or bid
+        amount: Amount in BTC or LTC. When omitted, amount_funds is required. Also note that this field and the
+                amount_funds field cannot both be set when the price field is also set. When the price field is not set
+                this field can be set when amount_funds is also set.
+        price: Limit price in EUR (*1e5)
+        amount_funds: When omitted, amount is required. Also note that this field and the amount field cannot
+                      both be set when the price field is also set. When the price field is not set this field can be
+                      set when amount is also set.
+        market: BTCEUR or LTCEUR
     """
-    raise NotImplemented
+    assert type_ in ('ask', 'bid')
+    assert market in ('BTCEUR', 'LTCEUR')
+    assert fee_currency in ('BTC', 'EUR')
+    assert bool(amount) or bool(amount_funds)  # make sure one it set
+    if bool(price):
+        assert bool(amount) != bool(amount_funds)  # make sure only one is set if price is given
+    params = {'type': type_, 'fee_currency': fee_currency}
+    if amount:
+        params['amount_int'] = amount
+    if price:
+        params['price_int'] = price
+    if amount_funds:
+        params['amount_funds_int'] = amount_funds
+
+    data = private_request(callname='order/add', market=market, params=params)
+    return error_check(data)
 
 
 def order_cancel(order_id: int, market: str = 'BTCEUR'):
