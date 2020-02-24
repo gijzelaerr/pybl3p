@@ -1,6 +1,5 @@
-from typing import List, Tuple
+from typing import Tuple
 from pybl3p.requests import private_request
-from datetime import datetime
 import pandas as pd
 
 

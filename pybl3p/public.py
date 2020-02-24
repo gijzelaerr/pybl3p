@@ -1,4 +1,4 @@
-from typing import Tuple, List, Dict, AsyncGenerator
+from typing import Tuple, List, AsyncGenerator
 import pandas as pd
 
 from pybl3p.requests import public_request, websocket_request
@@ -23,12 +23,12 @@ def ticker() -> (str, float, float, float, Tuple[float, float]):
     return public_request('ticker')
 
 
-def orderbook() -> (List[Tuple[int, int, int]], List[Tuple[int, int, int]]):
+def orderbook() -> (pd.DataFrame, pd.DataFrame):
     """
      The list of orders that the exchanges uses to record the interest of buyers and sellers
 
     Returns:
-        a tuple containing 'asks' list and 'bids' dataframes with columns:
+        a tuple containing 'asks' list and 'bids' DataFrames with columns:
             amount: Amount BTC (*1e8)
             price: Limit price in EUR (*1e5)
             count: Count of orders at this price.

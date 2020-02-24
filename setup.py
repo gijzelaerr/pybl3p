@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pybl3p",
-    version="0.3",
+    version="0.4",
     author="Gijs Molenaar",
     author_email="gijs@pythonic.nl",
     description="A python wrapper for the bl3p cryptocurrency exchange",
